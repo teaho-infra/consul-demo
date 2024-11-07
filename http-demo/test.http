@@ -1,0 +1,38 @@
+# 列出所有service
+GET {{host}}/v1/agent/services
+###
+
+
+PUT {{host}}/v1/agent/service/register
+Content-Type: application/json
+
+{
+  "ID": "redis1",
+  "Name": "redis",
+  "Tags": [
+    "primary",
+    "v1"
+  ],
+  "Address": "127.0.0.1",
+  "Port": 8000,
+  "Meta": {
+    "redis_version": "4.0"
+  },
+  "EnableTagOverride": false,
+  "check": {
+    "id": "ssh",
+    "name": "SSH TCP on port 22",
+    "tcp": "localhost:8500",
+    "interval": "10s",
+    "timeout": "1s"
+  },
+  "Weights": {
+    "Passing": 10,
+    "Warning": 1
+  }
+}
+###
+# unregiester service {{host}}/v1/agent/service/deregister/{{service-id}}
+PUT {{host}}/v1/agent/service/deregister/redis1
+
+###

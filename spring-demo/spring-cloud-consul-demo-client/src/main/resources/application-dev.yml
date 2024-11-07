@@ -1,0 +1,31 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: instance-${spring.application.name}
+        serviceName: ${spring.application.name}
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 15s
+        metadata:
+          myfield: clientVal
+          anotherfield: clientVal2
+        tags: clientTag
+      config:
+        enabled: false
+        profileSeparator: '::'
+        format: YAML
+#  config:
+#    import: "consul:"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    consul:
+      enabled: true
+

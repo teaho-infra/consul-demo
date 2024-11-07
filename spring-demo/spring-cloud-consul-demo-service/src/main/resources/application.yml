@@ -1,0 +1,7 @@
+server:
+  port: 28050
+spring:
+  application:
+    name: spring-cloud-consul-demo-service
+  profiles:
+    active: dev

@@ -1,8 +1,8 @@
-# 列出所有service
+# list all service
 GET {{host}}/v1/agent/services
 ###
 
-
+# register services
 PUT {{host}}/v1/agent/service/register
 Content-Type: application/json
 

@@ -30,3 +30,12 @@ target_link_libraries(client_discovery_demo PRIVATE
         ppconsul
         ${WORKFLOW_LIB})
 
+add_executable(kv_demo kvMain.cpp)
+target_link_libraries(kv_demo PRIVATE
+        ppconsul
+        ${WORKFLOW_LIB})
+
+add_executable(session_demo sessionMain.cpp)
+target_link_libraries(session_demo PRIVATE
+        ppconsul
+        ${WORKFLOW_LIB})

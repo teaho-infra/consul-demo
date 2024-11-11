@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 set (DEPS_DIR ${CMAKE_SOURCE_DIR}/deps)
 set (WORKFLOW_DIR ${DEPS_DIR}/workflow)
 include_directories(${WORKFLOW_DIR}/include)
-find_library(WORKFLOW libworkflow.so ${WORKFLOW_DIR}/lib)
+find_library(WORKFLOW libworkflow.a ${WORKFLOW_DIR}/lib)
 
 set (PPCONSUL_DIR ${DEPS_DIR}/ppconsul)
 include_directories(${PPCONSUL_DIR}/include)

@@ -1,23 +1,18 @@
 
 
 #include <iostream>
+#include <thread>
 #include "ppconsul/consul.h"
 #include "workflow/WFTaskFactory.h"
 #include "ppconsul/agent.h"
-#include <iostream>
+#include "workflow/WFHttpServer.h"
+
 using std::cout;
 using std::endl;
 
+auto serviceId = "consul-demo-service";
 
-//维持节点健康
-void timerCallback(WFTimerTask* timerTask){
-    ppconsul::agent::Agent *pagent = static_cast<ppconsul::agent::Agent*>(timerTask->user_data);
-    pagent->servicePass("SignupServicel");
-    auto nextTask = WFTaskFactory::create_timer_task(5000000,timerCallback);
-    cout << nextTask << endl;
-    nextTask->user_data = pagent;
-    series_of(timerTask)->push_back(nextTask);
-}
+
 
 int main()
 {
@@ -26,14 +21,21 @@ int main()
     ppconsul::Consul consul("127.0.0.1:8500",ppconsul::kw::dc = "dc1");
     //创建一个用来访问注册中心的agent
     ppconsul::agent::Agent agent(consul);
-
+//    auto tags = std::set<std::string>();
     agent.registerService(
-            ppconsul::agent::kw::name = "SignupServicel",
+            ppconsul::agent::kw::name = serviceId,
             ppconsul::agent::kw::address = "127.0.0.1",
-            ppconsul::agent::kw::id = "SignupServicel",
-            ppconsul::agent::kw::port = 1412);
-    agent.servicePass("SignupServicel");//设置健康服务(心跳)
-    auto timerTask = WFTaskFactory::create_timer_task(1000,timerCallback);
-    timerTask->user_data = &agent;
-    timerTask->start();
+            ppconsul::agent::kw::id = serviceId,
+            ppconsul::agent::kw::port = 1412,
+            ppconsul::agent::kw::tags = {"cpp-consul-demo"},
+            ppconsul::agent::kw::meta = {{"meta1", "cpp-consul-demo"}},
+            ppconsul::agent::kw::check = ppconsul::agent::TcpCheck{"127.0.0.1:8500", std::chrono::seconds(10)} // 只做模拟操作，用的consul本身的地址
+            );
+
+//    std::this_thread::sleep_for(std::chrono::milliseconds(60000));
+    getchar();
+    agent.deregisterService(serviceId);
+
+    std::cout << "Waited 3 seconds!" << std::endl;
+
 }
